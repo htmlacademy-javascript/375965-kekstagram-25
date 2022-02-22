@@ -1,27 +1,20 @@
-// Функция, возвращающая рандомное число в определенном диапазоне
+'use strict';
 
-function getRandomNumber (min, max) {
+const MAX_COMMENT_LENGTH = 140;
+const TEST_COMMENT = 'Комментарий пользователя';
 
-  if (min >= 0 && min < max) {
-    return Math.floor(Math.random() * ((max + 1) - min) + min);
+const getRandomNumber = (min, max) => {
+
+  if (min < 0 || min > max) {
+    throw 'getRandomNumber error: check min and max values';
   }
 
-  throw 'Error';
-}
+  return Math.floor(Math.random() * ((max + 1) - min) + min);
+
+};
 
 getRandomNumber(1, 20);
 
-// Функция для проверки максимальной длины строки
+const isStringHasCorrectLength = (value, maxLength) => value.length <= maxLength;
 
-function checkUserComment (userComment) {
-
-  const MAX_LENGTH = 10;
-
-  if (userComment.length <= MAX_LENGTH && userComment !== '') {
-    return true;
-  }
-
-  return false;
-}
-
-checkUserComment('Комментарий пользователя');
+isStringHasCorrectLength(TEST_COMMENT, MAX_COMMENT_LENGTH);
