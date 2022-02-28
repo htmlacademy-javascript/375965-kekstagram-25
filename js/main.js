@@ -44,31 +44,43 @@ const getRandomNumber = (min, max) => {
 
 };
 
+const getRandomElement = (array) => {
+  const index = getRandomNumber(0, array.length - 1);
+  return array[index];
+};
+
 const isStringHasCorrectLength = (value, maxLength) => value.length <= maxLength;
 
 isStringHasCorrectLength(TEST_COMMENT, MAX_COMMENT_LENGTH);
 
+const createComment = (index) => ({
+  id: index,
+  avatar: `img/avatar-${getRandomNumber(1, 6)}.svg`,
+  message: getRandomElement(USER_COMMENTS),
+  name: getRandomElement(USER_NAMES),
+});
 
-const createPostDescription = () => {
-  const randomDescriptionIndex = getRandomNumber(0, DESCRIPTIONS.length - 1);
-  const randomCommentIndex = getRandomNumber(0, USER_COMMENTS.length - 1);
+const createCommentList = (postId) => {
+  const numberOfComments = getRandomNumber(1, 3);
+  const comments = [];
 
-  return {
-    id: `${++this.length}`,
-    url: `photos/${this.length}.jpg`,
-    description: DESCRIPTIONS[randomDescriptionIndex],
-    likes: getRandomNumber(15, 200),
-    comments: [
-      {
-        id: `${getRandomNumber(1, 1000)}`,
-        avatar: `img/avatar-${getRandomNumber(1, 6)}.svg`,
-        message: USER_COMMENTS[randomCommentIndex],
-        name: USER_NAMES[getRandomNumber(0, USER_NAMES.length - 1)]
-      },
-    ],
-  };
+  for (let commentId = 1; commentId < numberOfComments; commentId++) {
+    comments.push(createComment(postId * 10 + commentId));
+  }
+
+  return comments;
 };
 
-const postDescriptionList = Array.from({length: 25}, createPostDescription);
+const createPostDescription = (index) => ({
+  id: index,
+  url: `photos/${index}.jpg`,
+  description: getRandomElement(DESCRIPTIONS),
+  likes: getRandomNumber(15, 200),
+  comments: createCommentList(index),
+});
 
-postDescriptionList();
+const postDescriptionList = [];
+
+for (let i = 1; i <= 25; i++) {
+  postDescriptionList.push(createPostDescription(i));
+}
