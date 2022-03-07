@@ -47,7 +47,7 @@ const createCommentList = (postId) => {
   const numberOfComments = getRandomNumber(1, 3);
   const comments = [];
 
-  for (let commentId = 1; commentId < numberOfComments; commentId++) {
+  for (let commentId = 1; commentId <= numberOfComments; commentId++) {
     comments.push(createComment(postId * 10 + commentId));
   }
 
