@@ -1,3 +1,1 @@
-import { postDescriptionList } from './data.js';
-
-postDescriptionList.slice();
+import './picture-render.js';
