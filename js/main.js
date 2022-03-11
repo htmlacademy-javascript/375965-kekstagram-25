@@ -1,4 +1,4 @@
 import './picture-render.js';
-import { addThumbnailClickHandler } from './picture-show.js';
+import { initPictures } from './picture-show.js';
 
-addThumbnailClickHandler();
+initPictures();
