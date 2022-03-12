@@ -2,6 +2,7 @@ import { getRandomNumber, getRandomElement, isStringHasCorrectLength } from './u
 
 const MAX_COMMENT_LENGTH = 140;
 const TEST_COMMENT = 'Комментарий пользователя';
+const POSTS_COUNT = 25;
 
 const USER_NAMES = [
   'Иван',
@@ -36,36 +37,36 @@ const DESCRIPTIONS = [
 
 isStringHasCorrectLength(TEST_COMMENT, MAX_COMMENT_LENGTH);
 
-const createComment = (index) => ({
+const createPostComment = (index) => ({
   id: index,
   avatar: `img/avatar-${getRandomNumber(1, 6)}.svg`,
   message: getRandomElement(USER_COMMENTS),
   name: getRandomElement(USER_NAMES),
 });
 
-const createCommentList = (postId) => {
+const createPostComments= (postId) => {
   const numberOfComments = getRandomNumber(1, 3);
   const comments = [];
 
   for (let commentId = 1; commentId <= numberOfComments; commentId++) {
-    comments.push(createComment(postId * 10 + commentId));
+    comments.push(createPostComment(postId * 10 + commentId));
   }
 
   return comments;
 };
 
-const createPostDescription = (index) => ({
+const createPost = (index) => ({
   id: index,
   url: `photos/${index}.jpg`,
   description: getRandomElement(DESCRIPTIONS),
   likes: getRandomNumber(15, 200),
-  comments: createCommentList(index),
+  comments: createPostComments(index),
 });
 
-const postDescriptionList = [];
+const posts = [];
 
-for (let i = 1; i <= 25; i++) {
-  postDescriptionList.push(createPostDescription(i));
+for (let i = 1; i <= POSTS_COUNT; i++) {
+  posts.push(createPost(i));
 }
 
-export { postDescriptionList };
+export { posts };
