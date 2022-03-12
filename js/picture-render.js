@@ -7,14 +7,15 @@ const userPosts = postDescriptionList.slice();
 
 const similarPostsFragment = document.createDocumentFragment();
 
-userPosts.forEach(({ url, likes, comments }) => {
+userPosts.forEach(({ id, url, likes, comments }) => {
   const postElement = pictureTemplate.cloneNode(true);
   postElement.querySelector('.picture__img').src = url;
   postElement.querySelector('.picture__likes').textContent = likes;
   postElement.querySelector('.picture__comments').textContent = comments.length;
-  similarPostsFragment.appendChild(postElement);
+  postElement.dataset.postId = id;
+  similarPostsFragment.append(postElement);
 });
 
-pictureList.appendChild(similarPostsFragment);
+pictureList.append(similarPostsFragment);
 
 export { userPosts };
