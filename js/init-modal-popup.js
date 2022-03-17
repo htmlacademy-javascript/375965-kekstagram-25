@@ -6,16 +6,14 @@ const bigPictureImg = document.querySelector('.big-picture__img img');
 const commentsCount = document.querySelector('.comments-count');
 const likesCount = document.querySelector('.likes-count');
 const socialCaption = document.querySelector('.social__caption');
-const commentCountArea = document.querySelector('.social__comment-count');
-const commentsLoader = document.querySelector('.comments-loader');
+// const commentCountArea = document.querySelector('.social__comment-count');
+// const commentsLoader = document.querySelector('.comments-loader');
 const picturesContainer = document.querySelector('.pictures');
 const fullPhoto = document.querySelector('.big-picture');
 const pictureCloseButton = document.querySelector('.big-picture__cancel');
 
 const similarCommentsFragment = document.createDocumentFragment();
 const initModalPopup = () => {
-
-
   picturesContainer.addEventListener('click', onClickPictures);
 
   pictureCloseButton.addEventListener('click', () => {
@@ -33,15 +31,17 @@ const initModalPopup = () => {
   });
 };
 
-function onClickPictures () {
-  const postId = event.target.closest('a.picture').dataset.postId - 1;
+function onClickPictures (evt) {
+  if (evt.target.tagName.toLowerCase() !== 'img' && evt.target.tagName.toLowerCase() !== 'span') {
+    return;
+  }
+
+  const postId = evt.target.closest('a.picture').dataset.postId - 1;
   const currentPost = posts[postId];
   fullPhoto.classList.remove('hidden');
   document.body.classList.add('modal-open');
-  commentCountArea.classList.add('hidden');
-  commentsLoader.classList.add('hidden');
   bigPictureImg.src = currentPost.url;
-  commentsCount.textContent = currentPost.comments;
+  commentsCount.textContent = currentPost.comments.length;
   likesCount.textContent = currentPost.likes;
   socialCaption.textContent = currentPost.description;
   commentsContainer.innerHTML = '';
@@ -54,6 +54,7 @@ function onClickPictures () {
     commentsItem.querySelector('.social__text').textContent = message;
     similarCommentsFragment.appendChild(commentsItem);
   });
+
   commentsContainer.appendChild(similarCommentsFragment);
   picturesContainer.removeEventListener('click', onClickPictures);
 }

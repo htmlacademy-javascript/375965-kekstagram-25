@@ -19,7 +19,7 @@ const openOverlay = (callback) => {
     picturesContainer.removeEventListener('click', onClickPictures);
     // const input = event.target;
     // const file = input.files[0];
-
+    // для загрузки файла
   });
 
   uploadCancel.addEventListener('click', () => {
@@ -40,6 +40,13 @@ const openOverlay = (callback) => {
 
 function validateHashtags (value) {
   const arr = value.toString().split(' ');
+  // re.test(arr[0]);
+  // if (arr.length > 1) {
+  //   arr.forEach((element) => {
+  //     const result = re.test(arr[element]);
+  //     return result;
+  //   });
+  // }
 
   for (let i = 0; i <= arr.length; i++) {
     if (re.test(arr[i]) === true) {
@@ -59,12 +66,13 @@ pristine.addValidator(commentField, validateComment, 'Ошибка');
 postUploadForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
   pristine.validate();
-  // const isValid = pristine.validate();
-  // // if (isValid) {
-  // //   console.log('valid');
-  // // } else {
-  // //   console.log('not valid');
-  // // }
+
+  const isValid = pristine.validate();
+  if (isValid) {
+    return true;
+  } else {
+    // console.log('not valid');
+  }
 });
 
 openOverlay(uploadFileItem);
