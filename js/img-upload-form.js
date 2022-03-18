@@ -9,12 +9,21 @@ const hashTagsField = postUploadForm.querySelector('.text__hashtags');
 const commentField = postUploadForm.querySelector('.text__description');
 const re = /^#[A-Za-zA-Яа-яЕё0-9]{1,19}$/;
 
-const pristine = new Pristine(postUploadForm);
+const pristine = new Pristine(postUploadForm, {
+  classTo: 'text__item',
+  errorClass: 'text--invalid',
+  successClass: 'text--valid',
+  errorTextParent: 'text__item',
+  errorTextTag: 'span',
+  errorTextClass: 'text__error'
+});
 
-let isHashTagFieldFocused = false;
+let isInputFocused = false;
 
-hashTagsField.addEventListener('focus', () => { isHashTagFieldFocused = true; });
-hashTagsField.addEventListener('focusout', () => { isHashTagFieldFocused = false; });
+hashTagsField.addEventListener('focus', () => { isInputFocused = true; });
+hashTagsField.addEventListener('focusout', () => { isInputFocused = false; });
+commentField.addEventListener('focus', () => { isInputFocused = true; });
+commentField.addEventListener('focusout', () => { isInputFocused = false; });
 
 const onCloseOverlay = () => {
   postUploadForm.reset();
@@ -38,7 +47,7 @@ const imgDownloadOverlay = () => {
   });
 
   document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape' && !isHashTagFieldFocused) {
+    if (evt.key === 'Escape' && !isInputFocused) {
       onCloseOverlay();
     }
   });
@@ -49,8 +58,6 @@ function validateHashtags (value) {
 
   for (let i = 0; i < hashTagList.length; i++) {
     if (re.test(hashTagList[i]) === false) {
-      return false;
-    } else if (hashTagList[i].length > 20) {
       return false;
     } else if (hashTagList.length > 5) {
       return false;
@@ -63,8 +70,8 @@ function validateComment (value) {
   return value.length >= 0 && value.length <= 140;
 }
 
-pristine.addValidator(hashTagsField, validateHashtags, 'Ошибка');
-pristine.addValidator(commentField, validateComment, 'Ошибка');
+pristine.addValidator(hashTagsField, validateHashtags, 'Максимальная длина одного хэш-тэга 20 символов, минимальная 2');
+pristine.addValidator(commentField, validateComment, 'Превышен лимит 140 символов');
 
 postUploadForm.addEventListener('submit', (evt) => {
   const isValid = pristine.validate();
