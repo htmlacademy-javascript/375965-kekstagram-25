@@ -54,8 +54,7 @@ const imgDownloadOverlay = () => {
 };
 
 function validateHashtags (value) {
-  const hashTagList = value.toString().split(' ');
-
+  const hashTagList = value.toString().toLowerCase().split(' ');
   for (let i = 0; i < hashTagList.length; i++) {
     if (re.test(hashTagList[i]) === false) {
       return false;
