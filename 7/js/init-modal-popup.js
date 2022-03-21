@@ -6,33 +6,15 @@ const bigPictureImg = document.querySelector('.big-picture__img img');
 const commentsCount = document.querySelector('.comments-count');
 const likesCount = document.querySelector('.likes-count');
 const socialCaption = document.querySelector('.social__caption');
-// const commentCountArea = document.querySelector('.social__comment-count');
-// const commentsLoader = document.querySelector('.comments-loader');
 const picturesContainer = document.querySelector('.pictures');
 const fullPhoto = document.querySelector('.big-picture');
 const pictureCloseButton = document.querySelector('.big-picture__cancel');
+const pictureIcon = document.querySelector('.picture');
 
 const similarCommentsFragment = document.createDocumentFragment();
-const initModalPopup = () => {
-  picturesContainer.addEventListener('click', onClickPictures);
 
-  pictureCloseButton.addEventListener('click', () => {
-    fullPhoto.classList.add('hidden');
-    document.body.classList.remove('modal-open');
-    picturesContainer.addEventListener('click', onClickPictures);
-  });
-
-  document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
-      fullPhoto.classList.add('hidden');
-      document.body.classList.remove('modal-open');
-      picturesContainer.addEventListener('click', onClickPictures);
-    }
-  });
-};
-
-function onClickPictures (evt) {
-  if (evt.target.tagName.toLowerCase() !== 'img' && evt.target.tagName.toLowerCase() !== 'span') {
+const onClickPictures = (evt) => {
+  if ( [pictureIcon].includes(evt.target.tagName.toLowerCase()) ) {
     return;
   }
 
@@ -57,6 +39,24 @@ function onClickPictures (evt) {
 
   commentsContainer.appendChild(similarCommentsFragment);
   picturesContainer.removeEventListener('click', onClickPictures);
-}
+};
+
+const initModalPopup = () => {
+  picturesContainer.addEventListener('click', onClickPictures);
+
+  pictureCloseButton.addEventListener('click', () => {
+    fullPhoto.classList.add('hidden');
+    document.body.classList.remove('modal-open');
+    picturesContainer.addEventListener('click', onClickPictures);
+  });
+
+  document.addEventListener('keydown', (evt) => {
+    if (evt.key === 'Escape') {
+      fullPhoto.classList.add('hidden');
+      document.body.classList.remove('modal-open');
+      picturesContainer.addEventListener('click', onClickPictures);
+    }
+  });
+};
 
 export { initModalPopup, onClickPictures };
