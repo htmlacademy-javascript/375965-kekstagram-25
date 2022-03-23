@@ -8,7 +8,7 @@ const uploadCancel = document.querySelector('#upload-cancel');
 const uploadOverlay = document.querySelector('.img-upload__overlay');
 const hashTagsField = postUploadForm.querySelector('.text__hashtags');
 const commentField = postUploadForm.querySelector('.text__description');
-const re = /^#[A-Za-zA-Яа-яЕё0-9]{2,20}$/;
+const re = /^#[A-Za-zA-Яа-яЁё0-9]{2,20}$/;
 
 const pristine = new Pristine(postUploadForm, {
   classTo: 'text__item',
@@ -49,11 +49,13 @@ const imgDownloadOverlay = () => {
   });
 };
 
-const validateHashtagsCount = (value) => value.toString().trim().split(' ').length <= HASH_TAGS_MAX_COUNT;
+const getHashtagsAsArray = (value) => value.toString().trim().toLowerCase().split(' ').filter((e) => e.trim() !== '');
+
+const validateHashtagsCount = (value) => getHashtagsAsArray(value).length <= HASH_TAGS_MAX_COUNT;
 
 const validateUniqueHashTag = (value) => {
-  const arr = value.toString().trim().toLowerCase().split(' ').sort();
-  for (let i = 0; i < arr.length; i++) {
+  const arr = getHashtagsAsArray(value).sort();
+  for (let i = 0; i < arr.length - 1; i++) {
     if (arr[i] === arr[i + 1]) {
       return false;
     }
@@ -62,11 +64,7 @@ const validateUniqueHashTag = (value) => {
 };
 
 const validateHashtags = (value) => {
-  const hashTagString = value.toString().trim().toLowerCase();
-  if (hashTagString === '') {
-    return true;
-  }
-  const hashTagList = hashTagString.split(' ');
+  const hashTagList = getHashtagsAsArray(value);
   for (let i = 0; i < hashTagList.length; i++) {
     if (re.test(hashTagList[i]) === false) {
       return false;
