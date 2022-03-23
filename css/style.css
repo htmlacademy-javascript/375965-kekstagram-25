@@ -683,12 +683,28 @@ main {
   border-radius: 5px;
 }
 
+.text__item {
+  margin: 0;
+  padding: 0;
+}
+
+.text__error {
+  display: block;
+
+  margin: -20px auto 0 auto;
+  padding: 0;
+
+  font-size: 8px;
+  color: rgb(245, 105, 105);
+}
+
 .text__description {
   width: 450px;
   height: 100px;
 
   margin: 0 auto;
   padding: 15px 10px;
+  margin-bottom: 20px;
 
   font-family: "Open Sans", "Arial", sans-serif;
   font-weight: 400;
@@ -704,6 +720,7 @@ main {
 
 .img-upload__submit {
   padding: 10px 20px;
+  margin-top: -20px;
 
   color: #ffe753;
   text-align: center;
