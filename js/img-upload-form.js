@@ -1,4 +1,7 @@
 import {onClickPictures} from './init-modal-popup.js';
+import { onClickBigger, onClickSmaller } from './scale-control.js';
+import {onRadioChange} from './filter-control.js';
+
 const MAX_COMMENT_LENGTH = 140;
 const HASH_TAGS_MAX_COUNT = 5;
 const picturesContainer = document.querySelector('.pictures');
@@ -8,6 +11,8 @@ const uploadCancel = document.querySelector('#upload-cancel');
 const uploadOverlay = document.querySelector('.img-upload__overlay');
 const hashTagsField = postUploadForm.querySelector('.text__hashtags');
 const commentField = postUploadForm.querySelector('.text__description');
+const scaleControlSmaller = document.querySelector('.scale__control--smaller');
+const scaleControlBigger = document.querySelector('.scale__control--bigger');
 const re = /^#[A-Za-zA-Яа-яЁё0-9]{2,20}$/;
 
 const pristine = new Pristine(postUploadForm, {
@@ -41,6 +46,10 @@ const imgDownloadOverlay = () => {
   });
 
   uploadCancel.addEventListener('click', onCloseOverlay);
+
+  scaleControlSmaller.addEventListener('click', onClickSmaller);
+  scaleControlBigger.addEventListener('click', onClickBigger);
+  onRadioChange();
 
   document.addEventListener('keydown', (evt) => {
     if (evt.key === 'Escape' && !isInputFocused) {
