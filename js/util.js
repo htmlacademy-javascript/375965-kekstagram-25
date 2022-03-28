@@ -15,4 +15,6 @@ const getRandomElement = (array) => {
 
 const isStringHasCorrectLength = (value, maxLength) => value.length <= maxLength;
 
-export { getRandomNumber, getRandomElement, isStringHasCorrectLength };
+const clip = (value, min, max) => Math.min(max, Math.max(min, value));
+
+export { getRandomNumber, getRandomElement, isStringHasCorrectLength, clip };
