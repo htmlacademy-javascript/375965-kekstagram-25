@@ -1,21 +1,20 @@
+import { clip } from './util.js';
+
 const SCALE_STEP = 25;
+const SCALE_MIN = 25;
+const SCALE_MAX = 100;
 const scaleControlValue = document.querySelector('.scale__control--value');
 const imgUploadPreview = document.querySelector('.img-upload__preview img');
 
-const onClickSmaller = () => {
-  if (parseFloat(scaleControlValue.value) > 25) {
-    scaleControlValue.value = `${parseFloat(scaleControlValue.value) - SCALE_STEP}%`;
-    const dataToReduce = parseFloat(scaleControlValue.value) / 100;
-    imgUploadPreview.style.transform = `scale(${dataToReduce})`;
-  }
+const updatePreviewScale = (delta) => {
+  const newScale = clip(parseInt(scaleControlValue.value, 10) + delta, SCALE_MIN, SCALE_MAX);
+  scaleControlValue.value = `${newScale}%`;
+  const dataToReduce = newScale / 100.0;
+  imgUploadPreview.style.transform = `scale(${dataToReduce})`;
 };
 
-const onClickBigger = () => {
-  if (parseFloat(scaleControlValue.value) < 100) {
-    scaleControlValue.value = `${parseFloat(scaleControlValue.value) + SCALE_STEP}%`;
-    const dataToIncrease = parseFloat(scaleControlValue.value) / 100;
-    imgUploadPreview.style.transform = `scale(${dataToIncrease})`;
-  }
-};
+const onClickSmaller = () => updatePreviewScale(-SCALE_STEP);
+
+const onClickBigger = () => updatePreviewScale(SCALE_STEP);
 
 export {onClickBigger, onClickSmaller};
