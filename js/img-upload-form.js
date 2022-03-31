@@ -93,6 +93,13 @@ postUploadForm.addEventListener('submit', (evt) => {
   if (!pristine.validate()) {
     evt.preventDefault();
   }
+  const input = evt.target;
+  const file = input.files[0];
+  fetch('https://25.javascript.pages.academy/kekstagram', {
+    method: 'POST',
+    body: new FormData(file),
+    type: 'multipart/form-data'
+  }).then((response) => response.json());
 });
 
 export { imgDownloadOverlay };

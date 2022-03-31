@@ -1,4 +1,4 @@
-import { posts } from './data.js';
+// import { posts } from './data.js';
 import { clip } from './util.js';
 
 const COMMENTS_PER_POST = 5;
@@ -37,15 +37,15 @@ const onClickPictures = (evt) => {
     return;
   }
 
-  const postId = evt.target.closest('a.picture').dataset.postId - 1;
-  const currentPost = posts[postId];
+  const postId = evt.target.closest('a.picture').dataset.postId;
+  const currentPost = evt[postId]; // пока так поставил чтобы ошибку убрать, а так хочу сюда передать данные с fetch
   bigPictureImg.dataset.postId = postId;
 
   commentsLoader.classList.remove('visually-hidden');
 
   fullPhoto.classList.remove('hidden');
   document.body.classList.add('modal-open');
-  bigPictureImg.src = currentPost.url;
+  bigPictureImg.src = evt.target[postId].url;
   totalCommentsCount.textContent = currentPost.comments.length;
   openedCommentsCount.textContent = Math.min(COMMENTS_PER_POST, currentPost.comments.length);
 
@@ -79,7 +79,7 @@ const initModalPopup = () => {
     }
   });
 
-  commentsLoader.addEventListener('click', () => {
+  commentsLoader.addEventListener('click', (evt) => {
     const currentLastComment = +openedCommentsCount.textContent;
 
     openedCommentsCount.textContent =  clip(
@@ -91,7 +91,7 @@ const initModalPopup = () => {
       commentsLoader.classList.add('visually-hidden');
     }
     const postId = bigPictureImg.dataset.postId;
-    const post = posts[postId];
+    const post = evt.posts[postId];
     renderComments(post, currentLastComment, openedCommentsCount.textContent);
   });
 };
