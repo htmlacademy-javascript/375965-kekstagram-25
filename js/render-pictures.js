@@ -1,5 +1,3 @@
-// import { posts } from './data.js';
-
 const renderPictures = (posts) => {
   const pictureList = document.querySelector('.pictures');
   const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');

@@ -1,6 +1,3 @@
-// import { posts } from './data.js';
-import { clip } from './util.js';
-
 const COMMENTS_PER_POST = 5;
 const commentsTemplate = document.querySelector('#comments').content.querySelector('.social__comment');
 const commentsContainer = document.querySelector('.social__comments');
@@ -31,21 +28,21 @@ const renderComments = (post, firstComment, lastComments) => {
   commentsContainer.appendChild(similarCommentsFragment);
 };
 
-const onClickPictures = (evt) => {
+const onClickPictures = (evt, posts) => {
   // TODO исправить ошибку в консооли когда кликаешь по KEKSOGRAM
   if ( [pictureIcon].includes(evt.target.tagName.toLowerCase()) ) {
     return;
   }
 
   const postId = evt.target.closest('a.picture').dataset.postId;
-  const currentPost = evt[postId]; // пока так поставил чтобы ошибку убрать, а так хочу сюда передать данные с fetch
+  const currentPost = posts[postId];
   bigPictureImg.dataset.postId = postId;
 
   commentsLoader.classList.remove('visually-hidden');
 
   fullPhoto.classList.remove('hidden');
   document.body.classList.add('modal-open');
-  bigPictureImg.src = evt.target[postId].url;
+  bigPictureImg.src = currentPost.url;
   totalCommentsCount.textContent = currentPost.comments.length;
   openedCommentsCount.textContent = Math.min(COMMENTS_PER_POST, currentPost.comments.length);
 
@@ -62,36 +59,35 @@ const onClickPictures = (evt) => {
   picturesContainer.removeEventListener('click', onClickPictures);
 };
 
-const initModalPopup = () => {
-  picturesContainer.addEventListener('click', onClickPictures);
+const initModalPopup = (posts) => {
+  picturesContainer.addEventListener('click', (event) => onClickPictures(event, posts));
 
   pictureCloseButton.addEventListener('click', () => {
     fullPhoto.classList.add('hidden');
     document.body.classList.remove('modal-open');
-    picturesContainer.addEventListener('click', onClickPictures);
+    picturesContainer.addEventListener('click', (event) => onClickPictures(event, posts));
   });
 
   document.addEventListener('keydown', (evt) => {
     if (evt.key === 'Escape') {
       fullPhoto.classList.add('hidden');
       document.body.classList.remove('modal-open');
-      picturesContainer.addEventListener('click', onClickPictures);
+      picturesContainer.addEventListener('click', (event) => onClickPictures(event, posts));
     }
   });
 
-  commentsLoader.addEventListener('click', (evt) => {
+  commentsLoader.addEventListener('click', () => {
     const currentLastComment = +openedCommentsCount.textContent;
 
-    openedCommentsCount.textContent =  clip(
-      +totalCommentsCount.textContent + COMMENTS_PER_POST
-      , +openedCommentsCount.textContent
-      , +totalCommentsCount.textContent);
+    openedCommentsCount.textContent =  Math.min(
+      +openedCommentsCount.textContent + COMMENTS_PER_POST,
+      +totalCommentsCount.textContent);
 
     if (openedCommentsCount.textContent === totalCommentsCount.textContent) {
       commentsLoader.classList.add('visually-hidden');
     }
     const postId = bigPictureImg.dataset.postId;
-    const post = evt.posts[postId];
+    const post = posts[postId];
     renderComments(post, currentLastComment, openedCommentsCount.textContent);
   });
 };
