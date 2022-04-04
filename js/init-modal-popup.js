@@ -57,15 +57,16 @@ const onClickPictures = (evt, posts) => {
   renderComments(currentPost, 0, Math.min(COMMENTS_PER_POST, totalCommentsCount.textContent));
 
   picturesContainer.removeEventListener('click', onClickPictures);
+  document.removeEventListener('keydown', onClickPictures);
 };
 
 const initModalPopup = (posts) => {
-  picturesContainer.addEventListener('click', (event) => onClickPictures(event, posts));
+  picturesContainer.addEventListener('click', (evt) => onClickPictures(evt, posts));
 
   pictureCloseButton.addEventListener('click', () => {
     fullPhoto.classList.add('hidden');
     document.body.classList.remove('modal-open');
-    picturesContainer.addEventListener('click', (event) => onClickPictures(event, posts));
+    picturesContainer.addEventListener('click', (evt) => onClickPictures(evt, posts));
   });
 
   document.addEventListener('keydown', (evt) => {

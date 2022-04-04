@@ -1,7 +1,8 @@
 import {onClickPictures} from './init-modal-popup.js';
 import { onClickBigger, onClickSmaller } from './scale-control.js';
 import { onRadioChange } from './filter-control.js';
-import { showErrorMessage, showSuccessMessage } from './showInfoMessage.js';
+import { showSuccessMessage } from './img-upload-success.js';
+import { showErrorMessage } from './img-upload-error.js';
 import { sendData } from './api.js';
 
 const MAX_COMMENT_LENGTH = 140;
@@ -16,7 +17,6 @@ const hashTagsField = postUploadForm.querySelector('.text__hashtags');
 const commentField = postUploadForm.querySelector('.text__description');
 const scaleControlSmaller = document.querySelector('.scale__control--smaller');
 const scaleControlBigger = document.querySelector('.scale__control--bigger');
-const imgUploadLogo = document.querySelector('.img-upload__start');
 const re = /^#[A-Za-zA-Яа-яЁё0-9]{2,20}$/;
 
 const pristine = new Pristine(postUploadForm, {
@@ -35,7 +35,7 @@ hashTagsField.addEventListener('focusout', () => { isInputFocused = false; });
 commentField.addEventListener('focus', () => { isInputFocused = true; });
 commentField.addEventListener('focusout', () => { isInputFocused = false; });
 
-const onCloseOverlay = () => { // может переделать на оpenOverlay и closeOverlay? чтобы передавать потом в then и catch?
+const onCloseOverlay = () => {
   postUploadForm.reset(); // сбрасывание значений формы
   uploadOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
@@ -52,7 +52,7 @@ const unblockSubmitButton = () => {
   submitButton.textContent = 'Опубликовать';
 };
 
-const imgDownloadOverlay = () => {
+const uploadForm = () => {
   uploadFileItem.addEventListener('change', () => {
     uploadOverlay.classList.remove('hidden');
     document.body.classList.add('modal-open');
@@ -69,6 +69,24 @@ const imgDownloadOverlay = () => {
     if (evt.key === 'Escape' && !isInputFocused) {
       onCloseOverlay();
     }
+  });
+
+  postUploadForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    if (pristine.validate()) {
+      evt.preventDefault();
+    }
+    sendData(
+      () => {
+        onCloseOverlay();
+        showSuccessMessage();
+      },
+      () => {
+        onCloseOverlay();
+        showErrorMessage();
+      },
+      new FormData(evt.target),
+    );
   });
 };
 
@@ -103,25 +121,4 @@ pristine.addValidator(hashTagsField, validateHashtagsCount, 'Укажите не
 pristine.addValidator(hashTagsField, validateHashtags, 'Хэш-тэг должен начинаться с #, содержать от 2 до 20 символов');
 pristine.addValidator(commentField, validateComment, `Превышен лимит ${MAX_COMMENT_LENGTH} символов`);
 
-const setUserFormSubmit = (onSuccess) => {
-  postUploadForm.addEventListener('submit', (evt) => {
-    evt.preventDefault(); // Добавьте обработчик отправки формы, если ещё этого не сделали, который бы отменял действие формы по умолчанию и отправлял данные формы посредством fetch на сервер.
-    if (!pristine.validate()) {
-      evt.preventDefault();
-    }
-    blockSubmitButton();
-    sendData(
-      () => {
-        onSuccess();
-        showSuccessMessage();
-        imgUploadLogo.classList.add('hidden');
-      },
-      () => {
-        onCloseOverlay();
-        showErrorMessage();
-      },
-      new FormData(evt.target),
-    );
-  });
-};
-export { imgDownloadOverlay, setUserFormSubmit, onCloseOverlay, unblockSubmitButton };
+export { uploadForm, onCloseOverlay, unblockSubmitButton, blockSubmitButton };

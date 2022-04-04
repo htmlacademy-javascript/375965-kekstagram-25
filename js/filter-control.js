@@ -140,8 +140,8 @@ const onRadioChange = () => {
       effectLevelSlider.noUiSlider.updateOptions(filterParams[currentFilter]['filterParameter']);
     } else {
       effectLevelSlider.style = 'display: none';
+      imgUploadPreview.style = 'effect: none';
     }
-
   });
 };
 

@@ -1,5 +1,4 @@
-import { unblockSubmitButton } from './img-upload-form.js';
-
+import { unblockSubmitButton, blockSubmitButton } from './img-upload-form.js';
 const getData = (onSuccess) => {
   fetch('https://25.javascript.pages.academy/kekstagram/data')
     .then((response) => {
@@ -15,22 +14,19 @@ const getData = (onSuccess) => {
     });
 };
 
-const sendData = (onSuccess, onFail, body) => {
+const sendData = (onSuccess, onFail, formData) => {
+  blockSubmitButton();
   fetch('https://25.javascript.pages.academy/kekstagram', {
     method: 'POST',
-    body,
+    body: formData,
   })
     .then((response) => {
-      if (response.ok) {
-        onSuccess();
-        unblockSubmitButton();
-      } else {
-        onFail();
-        unblockSubmitButton();
-      }})
-    .catch(() => {
-      onFail();
       unblockSubmitButton();
+      return response.ok ? onSuccess() : onFail();
+    })
+    .catch(() => {
+      unblockSubmitButton();
+      onFail();
     });
 };
 
