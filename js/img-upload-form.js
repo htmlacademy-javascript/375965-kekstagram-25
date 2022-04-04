@@ -37,6 +37,7 @@ commentField.addEventListener('focusout', () => { isInputFocused = false; });
 
 const onCloseOverlay = () => {
   postUploadForm.reset(); // сбрасывание значений формы
+  pristine.reset();
   uploadOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   picturesContainer.addEventListener('click', onClickPictures);

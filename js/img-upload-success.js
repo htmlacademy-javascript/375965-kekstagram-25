@@ -1,4 +1,5 @@
 import { onCloseOverlay } from './img-upload-form.js';
+import { resetFilter } from './filter-control.js';
 
 const documentBody = document.querySelector('#body');
 const imgUploadLogo = document.querySelector('.img-upload__label');
@@ -22,6 +23,7 @@ const showSuccessMessage = () => {
     imgUploadLogo.classList.add('hidden');
     successMessageElement.remove();
     postUploadForm.reset();
+    resetFilter();
     onCloseOverlay();
   }
 

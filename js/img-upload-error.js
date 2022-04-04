@@ -1,4 +1,5 @@
 import { onCloseOverlay } from './img-upload-form.js';
+import { resetFilter } from './filter-control.js';
 
 const documentBody = document.querySelector('#body');
 const postUploadForm = document.querySelector('#upload-select-image');
@@ -20,7 +21,7 @@ const showErrorMessage = () => {
     document.removeEventListener('keydown', onErrorMessageEscapeDown);
     errorMessageElement.remove();
     postUploadForm.reset();
-    location.reload();
+    resetFilter();
     onCloseOverlay();
   }
 
