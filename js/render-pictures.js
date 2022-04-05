@@ -1,9 +1,60 @@
+import { getRandomNumber } from './util.js';
+const filterArea = document.querySelector('.img-filters');
+const filterButtons = document.querySelectorAll('.img-filters__button');
+
+const RANDOM_POSTS_COUNT = 10;
+
+const Filters = {
+  DEFAULT: 'filter-default',
+  RANDOM: 'filter-random',
+  DISCUSSED: 'filter-discussed'
+};
+
+let currentFilter = Filters.DEFAULT;
+
+const getCurrentFilter = () => currentFilter;
+const setCurrentFilter = (id) => {
+  switch (id) {
+    case Filters.RANDOM:
+      currentFilter = Filters.RANDOM;
+      break;
+    case Filters.DISCUSSED:
+      currentFilter = Filters.DISCUSSED;
+      break;
+    default:
+      currentFilter = Filters.DEFAULT;
+      break;
+  }
+};
+
+const compareLikesOfPost = (postA, postB) => postB.likes - postA.likes;
+
 const renderPictures = (posts) => {
   const pictureList = document.querySelector('.pictures');
   const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
   const similarPostsFragment = document.createDocumentFragment();
 
-  posts.forEach(({ id, url, likes, comments }) => {
+  let filteredPosts = [];
+  let temp = [];
+
+  switch (getCurrentFilter()) {
+    case Filters.RANDOM:
+      temp = posts.slice();
+      for (let i = 0; i < RANDOM_POSTS_COUNT && temp.length > 0; i++) {
+        const randomPostIndex = getRandomNumber(0, RANDOM_POSTS_COUNT);
+        filteredPosts.push(temp[randomPostIndex]);
+        temp.splice(randomPostIndex, 1);
+      }
+      break;
+    case Filters.DISCUSSED:
+      filteredPosts = posts.slice().sort(compareLikesOfPost);
+      break;
+    default:
+      filteredPosts = posts;
+      break;
+  }
+
+  filteredPosts.forEach(({ id, url, likes, comments }) => {
     const postElement = pictureTemplate.cloneNode(true);
     postElement.querySelector('.picture__img').src = url;
     postElement.querySelector('.picture__likes').textContent = likes;
@@ -12,7 +63,25 @@ const renderPictures = (posts) => {
     similarPostsFragment.append(postElement);
   });
 
+  document.querySelectorAll('.picture').forEach((photo) => {
+    photo.remove();
+  });
+
   pictureList.append(similarPostsFragment);
+  filterArea.classList.remove('img-filters--inactive');
 };
 
-export { renderPictures };
+const setFilterButton = (cb) => {
+  filterButtons.forEach((filterButton) => {
+    filterButton.addEventListener('click', (evt) => {
+      setCurrentFilter(evt.target.id);
+      filterButtons.forEach((button) => {
+        button.classList.remove('img-filters__button--active');
+      });
+      evt.target.classList.add('img-filters__button--active');
+      cb();
+    });
+  });
+};
+
+export { renderPictures, setFilterButton };
