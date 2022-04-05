@@ -75,19 +75,18 @@ const uploadForm = () => {
   postUploadForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     if (pristine.validate()) {
-      evt.preventDefault();
+      sendData(
+        () => {
+          onCloseOverlay();
+          showSuccessMessage();
+        },
+        () => {
+          onCloseOverlay();
+          showErrorMessage();
+        },
+        new FormData(evt.target),
+      );
     }
-    sendData(
-      () => {
-        onCloseOverlay();
-        showSuccessMessage();
-      },
-      () => {
-        onCloseOverlay();
-        showErrorMessage();
-      },
-      new FormData(evt.target),
-    );
   });
 };
 
