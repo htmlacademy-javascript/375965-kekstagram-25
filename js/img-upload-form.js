@@ -1,6 +1,9 @@
 import {onClickPictures} from './init-modal-popup.js';
 import { onClickBigger, onClickSmaller } from './scale-control.js';
-import {onRadioChange} from './filter-control.js';
+import { onRadioChange } from './filter-control.js';
+import { showSuccessMessage } from './img-upload-success.js';
+import { showErrorMessage } from './img-upload-error.js';
+import { sendData } from './api.js';
 
 const MAX_COMMENT_LENGTH = 140;
 const HASH_TAGS_MAX_COUNT = 5;
@@ -8,6 +11,7 @@ const picturesContainer = document.querySelector('.pictures');
 const postUploadForm = document.querySelector('#upload-select-image');
 const uploadFileItem = document.querySelector('#upload-file');
 const uploadCancel = document.querySelector('#upload-cancel');
+const submitButton = document.querySelector('#upload-submit');
 const uploadOverlay = document.querySelector('.img-upload__overlay');
 const hashTagsField = postUploadForm.querySelector('.text__hashtags');
 const commentField = postUploadForm.querySelector('.text__description');
@@ -32,13 +36,24 @@ commentField.addEventListener('focus', () => { isInputFocused = true; });
 commentField.addEventListener('focusout', () => { isInputFocused = false; });
 
 const onCloseOverlay = () => {
-  postUploadForm.reset();
+  postUploadForm.reset(); // сбрасывание значений формы
+  pristine.reset();
   uploadOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   picturesContainer.addEventListener('click', onClickPictures);
 };
 
-const imgDownloadOverlay = () => {
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = 'Отправляю...';
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = 'Опубликовать';
+};
+
+const uploadForm = () => {
   uploadFileItem.addEventListener('change', () => {
     uploadOverlay.classList.remove('hidden');
     document.body.classList.add('modal-open');
@@ -54,6 +69,23 @@ const imgDownloadOverlay = () => {
   document.addEventListener('keydown', (evt) => {
     if (evt.key === 'Escape' && !isInputFocused) {
       onCloseOverlay();
+    }
+  });
+
+  postUploadForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    if (pristine.validate()) {
+      sendData(
+        () => {
+          onCloseOverlay();
+          showSuccessMessage();
+        },
+        () => {
+          onCloseOverlay();
+          showErrorMessage();
+        },
+        new FormData(evt.target),
+      );
     }
   });
 };
@@ -89,10 +121,4 @@ pristine.addValidator(hashTagsField, validateHashtagsCount, 'Укажите не
 pristine.addValidator(hashTagsField, validateHashtags, 'Хэш-тэг должен начинаться с #, содержать от 2 до 20 символов');
 pristine.addValidator(commentField, validateComment, `Превышен лимит ${MAX_COMMENT_LENGTH} символов`);
 
-postUploadForm.addEventListener('submit', (evt) => {
-  if (!pristine.validate()) {
-    evt.preventDefault();
-  }
-});
-
-export { imgDownloadOverlay };
+export { uploadForm, onCloseOverlay, unblockSubmitButton, blockSubmitButton };

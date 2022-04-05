@@ -140,8 +140,8 @@ const onRadioChange = () => {
       effectLevelSlider.noUiSlider.updateOptions(filterParams[currentFilter]['filterParameter']);
     } else {
       effectLevelSlider.style = 'display: none';
+      imgUploadPreview.style = 'effect: none';
     }
-
   });
 };
 
@@ -161,4 +161,10 @@ effectLevelSlider.noUiSlider.on('update', () => {
   }
 });
 
-export { onRadioChange };
+const resetFilter = () => {
+  effectLevelSlider.style = 'display: none';
+  imgUploadPreview.style = 'effect: none';
+  effectLevelSlider.noUiSlider.set(0);
+};
+
+export { onRadioChange, resetFilter };
