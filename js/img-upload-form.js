@@ -55,9 +55,28 @@ const unblockSubmitButton = () => {
 
 const uploadForm = () => {
   uploadFileItem.addEventListener('change', () => {
+    const imgPreviewArea = document.querySelector('.img-upload__preview');
+    const effectsPreview = document.querySelectorAll('.effects__preview');
+    const img = imgPreviewArea.querySelector('img');
+    const selectedFile = uploadFileItem.files[0];
+    const reader = new FileReader();
+
+
     uploadOverlay.classList.remove('hidden');
     document.body.classList.add('modal-open');
     picturesContainer.removeEventListener('click', onClickPictures);
+    imgPreviewArea.appendChild(img);
+    reader.readAsDataURL(selectedFile);
+
+    effectsPreview.forEach((element) => {
+      element.style.backgroundImage = `url("${img.url}")`;
+    });
+
+    reader.onload = (function(aImg) {
+      return function(e) {
+        aImg.src = e.target.result;
+      };
+    })(img);
   });
 
   uploadCancel.addEventListener('click', onCloseOverlay);

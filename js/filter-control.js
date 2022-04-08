@@ -152,6 +152,7 @@ noUiSlider.create(effectLevelSlider, {
   },
   start: 3,
   step: 0.1,
+  connect: 'lower',
 });
 
 effectLevelSlider.noUiSlider.on('update', () => {
