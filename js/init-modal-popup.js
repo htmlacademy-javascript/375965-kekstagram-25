@@ -9,7 +9,6 @@ const socialCaption = document.querySelector('.social__caption');
 const picturesContainer = document.querySelector('.pictures');
 const fullPhoto = document.querySelector('.big-picture');
 const pictureCloseButton = document.querySelector('.big-picture__cancel');
-const pictureIcon = document.querySelector('.picture');
 const commentsLoader = document.querySelector('.comments-loader');
 
 const renderComments = (post, firstComment, lastComments) => {
@@ -29,12 +28,12 @@ const renderComments = (post, firstComment, lastComments) => {
 };
 
 const onClickPictures = (evt, posts) => {
-  // TODO исправить ошибку в консооли когда кликаешь по KEKSOGRAM
-  if ( [pictureIcon].includes(evt.target.tagName.toLowerCase()) ) {
+  const aPicture = evt.target.closest('a.picture');
+  if (aPicture === null) {
     return;
   }
 
-  const postId = evt.target.closest('a.picture').dataset.postId;
+  const postId = aPicture.dataset.postId;
   const currentPost = posts[postId];
   bigPictureImg.dataset.postId = postId;
 

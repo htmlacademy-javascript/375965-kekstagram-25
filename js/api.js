@@ -1,4 +1,5 @@
 import { unblockSubmitButton, blockSubmitButton } from './img-upload-form.js';
+
 const getData = (onSuccess) => {
   fetch('https://25.javascript.pages.academy/kekstagram/data')
     .then((response) => {
@@ -30,4 +31,4 @@ const sendData = (onSuccess, onFail, formData) => {
     });
 };
 
-export {getData, sendData};
+export { getData, sendData };
