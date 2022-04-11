@@ -27,7 +27,7 @@ const setCurrentFilter = (id) => {
   }
 };
 
-const compareLikesOfPost = (postA, postB) => postB.likes - postA.likes;
+const compareLikesOfPost = (postA, postB) => postB.comments.length - postA.comments.length;
 
 const renderPictures = (posts) => {
   const pictureList = document.querySelector('.pictures');
