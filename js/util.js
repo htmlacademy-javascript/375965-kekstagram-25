@@ -13,8 +13,6 @@ const getRandomElement = (array) => {
   return array[index];
 };
 
-const isStringHasCorrectLength = (value, maxLength) => value.length <= maxLength;
-
 const clip = (value, min, max) => Math.min(max, Math.max(min, value));
 
 const debounce = (callback, timeoutDelay = 500) => {
@@ -27,4 +25,4 @@ const debounce = (callback, timeoutDelay = 500) => {
   };
 };
 
-export { getRandomNumber, getRandomElement, isStringHasCorrectLength, clip, debounce };
+export { getRandomNumber, getRandomElement, clip, debounce };

@@ -1,4 +1,4 @@
-import {onClickPictures} from './init-modal-popup.js';
+import { onClickPictures } from './init-modal-popup.js';
 import { onClickBigger, onClickSmaller } from './scale-control.js';
 import { onRadioChange } from './filter-control.js';
 import { showSuccessMessage } from './img-upload-success.js';
@@ -55,9 +55,23 @@ const unblockSubmitButton = () => {
 
 const uploadForm = () => {
   uploadFileItem.addEventListener('change', () => {
+    const imgPreviewArea = document.querySelector('.img-upload__preview');
+    const effectsPreview = document.querySelectorAll('.effects__preview');
+    const img = imgPreviewArea.querySelector('img');
+    const selectedFile = uploadFileItem.files[0];
+    const reader = new FileReader();
+    reader.addEventListener('load', () => {
+      img.src = reader.result;
+      effectsPreview.forEach((element) => {
+        element.style.backgroundImage = `url("${img.src}")`;
+      });
+    }, false);
+
     uploadOverlay.classList.remove('hidden');
     document.body.classList.add('modal-open');
     picturesContainer.removeEventListener('click', onClickPictures);
+    imgPreviewArea.appendChild(img);
+    reader.readAsDataURL(selectedFile);
   });
 
   uploadCancel.addEventListener('click', onCloseOverlay);
