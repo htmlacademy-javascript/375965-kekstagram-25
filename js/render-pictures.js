@@ -1,6 +1,6 @@
 import { getRandomNumber } from './util.js';
-const filterArea = document.querySelector('.img-filters');
-const filterButtons = document.querySelectorAll('.img-filters__button');
+const filterContainerElement = document.querySelector('.img-filters');
+const filterButtonElements = document.querySelectorAll('.img-filters__button');
 
 const RANDOM_POSTS_COUNT = 10;
 
@@ -30,8 +30,8 @@ const setCurrentFilter = (id) => {
 const compareLikesOfPost = (postA, postB) => postB.comments.length - postA.comments.length;
 
 const renderPictures = (posts) => {
-  const pictureList = document.querySelector('.pictures');
-  const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
+  const pictureContainerElement = document.querySelector('.pictures');
+  const pictureTemplateElement = document.querySelector('#picture').content.querySelector('.picture');
   const similarPostsFragment = document.createDocumentFragment();
 
   let filteredPosts = [];
@@ -55,7 +55,7 @@ const renderPictures = (posts) => {
   }
 
   filteredPosts.forEach(({ id, url, likes, comments }) => {
-    const postElement = pictureTemplate.cloneNode(true);
+    const postElement = pictureTemplateElement.cloneNode(true);
     postElement.querySelector('.picture__img').src = url;
     postElement.querySelector('.picture__likes').textContent = likes;
     postElement.querySelector('.picture__comments').textContent = comments.length;
@@ -67,15 +67,15 @@ const renderPictures = (posts) => {
     photo.remove();
   });
 
-  pictureList.append(similarPostsFragment);
-  filterArea.classList.remove('img-filters--inactive');
+  pictureContainerElement.append(similarPostsFragment);
+  filterContainerElement.classList.remove('img-filters--inactive');
 };
 
 const setFilterButton = (cb) => {
-  filterButtons.forEach((filterButton) => {
+  filterButtonElements.forEach((filterButton) => {
     filterButton.addEventListener('click', (evt) => {
       setCurrentFilter(evt.target.id);
-      filterButtons.forEach((button) => {
+      filterButtonElements.forEach((button) => {
         button.classList.remove('img-filters__button--active');
       });
       evt.target.classList.add('img-filters__button--active');
