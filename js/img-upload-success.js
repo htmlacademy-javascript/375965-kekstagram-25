@@ -1,9 +1,10 @@
 import { onCloseOverlay } from './img-upload-form.js';
 import { resetFilter } from './filter-control.js';
+import { ESCAPE } from './constants.js';
 
-const documentBody = document.querySelector('#body');
-const imgUploadLogo = document.querySelector('.img-upload__label');
-const postUploadForm = document.querySelector('#upload-select-image');
+const documentBodyMainElement = document.querySelector('#body');
+const imgUploadLogoElement = document.querySelector('.img-upload__label');
+const postUploadFormElement = document.querySelector('#upload-select-image');
 
 const showSuccessMessage = () => {
   const successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
@@ -11,7 +12,7 @@ const showSuccessMessage = () => {
   const successMessageElement = successMessageTemplate.cloneNode(true);
 
   successMessageFragment.append(successMessageElement);
-  documentBody.append(successMessageFragment);
+  documentBodyMainElement.append(successMessageFragment);
 
   const successSectionElement = document.querySelector('.success');
   const successSectionButtonElement = document.querySelector('.success__button');
@@ -20,9 +21,9 @@ const showSuccessMessage = () => {
     document.removeEventListener('click', onSuccessMessageOuterAreaClick);
     document.removeEventListener('keydown', onSuccessMessageEscapeDown);
     successSectionButtonElement.removeEventListener('click', distructSuccessMessage);
-    imgUploadLogo.classList.add('hidden');
+    imgUploadLogoElement.classList.add('hidden');
     successMessageElement.remove();
-    postUploadForm.reset();
+    postUploadFormElement.reset();
     resetFilter();
     onCloseOverlay();
   }
@@ -34,7 +35,7 @@ const showSuccessMessage = () => {
   }
 
   function onSuccessMessageEscapeDown(evt) {
-    if (evt.key === 'Escape') {
+    if (evt.key === ESCAPE) {
       distructSuccessMessage();
     }
   }

@@ -83,11 +83,17 @@ const BRIGHTNESS_EFFECT = {
   }
 };
 
+const EFFECT_CHROME = 'chrome';
+const EFFECT_SEPIA = 'sepia';
+const EFFECT_MARVIN = 'marvin';
+const EFFECT_PHOBOS = 'phobos';
+const EFFECT_HEAT = 'heat';
+const EFFECT_NONE = 'none';
 
-const effectLevelSlider = document.querySelector('.effect-level__slider');
-const effectsList = document.querySelector('.effects__list');
-const imgUploadPreview = document.querySelector('.img-upload__preview img');
-const effectLevelValue = document.querySelector('.effect-level__value');
+const effectLevelSliderElement = document.querySelector('.effect-level__slider');
+const effectsContainerElement = document.querySelector('.effects__list');
+const imgUploadPreviewElement = document.querySelector('.img-upload__preview img');
+const effectLevelValueInputElement = document.querySelector('.effect-level__value');
 
 const arrayOfFilterClass = [
   'effects__preview--chrome',
@@ -99,53 +105,52 @@ const arrayOfFilterClass = [
 ];
 
 const filterParams = {
-  'chrome': {
+  [EFFECT_CHROME]: {
     'filterName': 'grayscale',
     'filterParameter': CHROME_EFFECT,
   },
-  'sepia': {
+  [EFFECT_SEPIA]: {
     'filterName': 'sepia',
     'filterParameter': SEPIA_EFFECT,
   },
-
-  'marvin':
+  [EFFECT_MARVIN]:
     {
       'filterName': 'invert',
       'filterParameter': MARVIN_EFFECT,
     },
-  'phobos':
+  [EFFECT_PHOBOS]:
     {
       'filterName': 'blur',
       'filterParameter': BLUR_EFFECT,
     },
-  'heat':
+  [EFFECT_HEAT]:
     {
       'filterName': 'brightness',
       'filterParameter': BRIGHTNESS_EFFECT,
     },
 };
 
-let currentFilter = 'none';
+let currentFilter = EFFECT_NONE;
 
 const onRadioChange = () => {
 
-  effectsList.addEventListener('change', (evt) => {
+  effectsContainerElement.addEventListener('change', (evt) => {
     currentFilter = evt.target.closest('input[type=radio]').value;
     for (let i = 0; i < arrayOfFilterClass.length; i++) {
-      imgUploadPreview.classList.remove(arrayOfFilterClass[i]);
+      imgUploadPreviewElement.classList.remove(arrayOfFilterClass[i]);
     }
-    imgUploadPreview.classList.add(`effects__preview--${currentFilter}`);
-    if (evt.target.classList.contains('effects__radio') && currentFilter !== 'none') {
-      effectLevelSlider.style = 'display: block';
-      effectLevelSlider.noUiSlider.updateOptions(filterParams[currentFilter]['filterParameter']);
+    imgUploadPreviewElement.classList.add(`effects__preview--${currentFilter}`);
+    if (evt.target.classList.contains('effects__radio') && currentFilter !== EFFECT_NONE) {
+      effectLevelSliderElement.style = 'display: block';
+      effectLevelSliderElement.noUiSlider.updateOptions(filterParams[currentFilter]['filterParameter']);
     } else {
-      effectLevelSlider.style = 'display: none';
-      imgUploadPreview.style = 'effect: none';
+      effectLevelSliderElement.style = 'display: none';
+      imgUploadPreviewElement.style = 'effect: none';
     }
   });
 };
 
-noUiSlider.create(effectLevelSlider, {
+noUiSlider.create(effectLevelSliderElement, {
   range: {
     min: 1,
     max: 3,
@@ -155,17 +160,17 @@ noUiSlider.create(effectLevelSlider, {
   connect: 'lower',
 });
 
-effectLevelSlider.noUiSlider.on('update', () => {
-  if (currentFilter !== 'none') {
-    imgUploadPreview.style.filter = `${filterParams[currentFilter]['filterName']}(${effectLevelSlider.noUiSlider.get()})`;
-    effectLevelValue.value = parseFloat(effectLevelSlider.noUiSlider.get());
+effectLevelSliderElement.noUiSlider.on('update', () => {
+  if (currentFilter !== EFFECT_NONE) {
+    imgUploadPreviewElement.style.filter = `${filterParams[currentFilter]['filterName']}(${effectLevelSliderElement.noUiSlider.get()})`;
+    effectLevelValueInputElement.value = parseFloat(effectLevelSliderElement.noUiSlider.get());
   }
 });
 
 const resetFilter = () => {
-  effectLevelSlider.style = 'display: none';
-  imgUploadPreview.style = 'effect: none';
-  effectLevelSlider.noUiSlider.set(0);
+  effectLevelSliderElement.style = 'display: none';
+  imgUploadPreviewElement.style = 'effect: none';
+  effectLevelSliderElement.noUiSlider.set(0);
 };
 
 export { onRadioChange, resetFilter };

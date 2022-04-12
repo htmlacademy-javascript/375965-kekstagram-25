@@ -3,8 +3,7 @@ import { initModalPopup } from './init-modal-popup.js';
 import { uploadForm } from './img-upload-form.js';
 import { getData } from './api.js';
 import { debounce } from './util.js';
-
-const RERENDER_DELAY = 500;
+import { RERENDER_DELAY } from './constants.js';
 
 getData((posts) => {
   renderPictures(posts);
