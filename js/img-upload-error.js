@@ -1,5 +1,4 @@
 import { onCloseOverlay } from './img-upload-form.js';
-import { resetFilter } from './filter-control.js';
 import { ESCAPE } from './constants.js';
 
 const documentBodyMainElement = document.querySelector('#body');
@@ -16,15 +15,14 @@ const showErrorMessage = () => {
   const errorSectionElement = document.querySelector('.error');
   const uploadOtherFileButtonElement = document.querySelector('.error__button');
 
-  function distructErrorMessage() {
+  const distructErrorMessage = () => {
     uploadOtherFileButtonElement.removeEventListener('click', distructErrorMessage);
     document.removeEventListener('click', onErrorMessageOuterClick);
     document.removeEventListener('keydown', onErrorMessageEscapeDown);
     errorMessageElement.remove();
     postUploadFormElement.reset();
-    resetFilter();
     onCloseOverlay();
-  }
+  };
 
   function onErrorMessageOuterClick(evt) {
     if (evt.target === errorSectionElement) {
