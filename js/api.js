@@ -11,10 +11,7 @@ const getData = (onSuccess) => {
     }).then((posts) => {
       onSuccess(posts);
     })
-    .catch((err) => {
-      showErrorConnectMessage();
-      throw Error(err);
-    });
+    .catch(showErrorConnectMessage);
 };
 
 const sendData = (onSuccess, onFail, formData) => {
