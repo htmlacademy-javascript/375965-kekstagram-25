@@ -5,6 +5,7 @@ import { showSuccessMessage } from './img-upload-success.js';
 import { showErrorMessage } from './img-upload-error.js';
 import { sendData } from './api.js';
 import { ESCAPE } from './constants.js';
+import { resetFilter } from './filter-control.js';
 
 const MAX_COMMENT_LENGTH = 140;
 const HASH_TAGS_MAX_COUNT = 5;
@@ -37,8 +38,11 @@ commentTextAreaElement.addEventListener('focus', () => { isInputFocused = true; 
 commentTextAreaElement.addEventListener('focusout', () => { isInputFocused = false; });
 
 const onCloseOverlay = () => {
+  const imgUploadPreviewElement = document.querySelector('.img-upload__preview img');
   postUploadFormElement.reset();
   pristine.reset();
+  resetFilter();
+  imgUploadPreviewElement.style.transform = 'none';
   uploadMainElement.classList.add('hidden');
   document.body.classList.remove('modal-open');
   picturesContainerElement.addEventListener('click', onClickPictures);
@@ -59,6 +63,7 @@ const uploadForm = () => {
     const imgPreviewContainerElement = document.querySelector('.img-upload__preview');
     const effectsPreviewContainetElement = document.querySelectorAll('.effects__preview');
     const imgPreviewElement = imgPreviewContainerElement.querySelector('img');
+    const effectLevelContainerElement = document.querySelector('.effect-level');
     const selectedFile = uploadFileInputElement.files[0];
     const reader = new FileReader();
     reader.addEventListener('load', () => {
@@ -67,7 +72,7 @@ const uploadForm = () => {
         element.style.backgroundImage = `url("${imgPreviewElement.src}")`;
       });
     }, false);
-
+    effectLevelContainerElement.style = 'display: none';
     uploadMainElement.classList.remove('hidden');
     document.body.classList.add('modal-open');
     picturesContainerElement.removeEventListener('click', onClickPictures);

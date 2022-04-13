@@ -1,9 +1,7 @@
 import { onCloseOverlay } from './img-upload-form.js';
-import { resetFilter } from './filter-control.js';
 import { ESCAPE } from './constants.js';
 
 const documentBodyMainElement = document.querySelector('#body');
-const imgUploadLogoElement = document.querySelector('.img-upload__label');
 const postUploadFormElement = document.querySelector('#upload-select-image');
 
 const showSuccessMessage = () => {
@@ -17,16 +15,14 @@ const showSuccessMessage = () => {
   const successSectionElement = document.querySelector('.success');
   const successSectionButtonElement = document.querySelector('.success__button');
 
-  function distructSuccessMessage() {
+  const distructSuccessMessage = () => {
     document.removeEventListener('click', onSuccessMessageOuterAreaClick);
     document.removeEventListener('keydown', onSuccessMessageEscapeDown);
     successSectionButtonElement.removeEventListener('click', distructSuccessMessage);
-    imgUploadLogoElement.classList.add('hidden');
     successMessageElement.remove();
     postUploadFormElement.reset();
-    resetFilter();
     onCloseOverlay();
-  }
+  };
 
   function onSuccessMessageOuterAreaClick(evt) {
     if (evt.target === successSectionElement) {

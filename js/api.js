@@ -1,4 +1,5 @@
 import { unblockSubmitButton, blockSubmitButton } from './img-upload-form.js';
+import { showErrorConnectMessage } from './posts-download-error.js';
 
 const getData = (onSuccess) => {
   fetch('https://25.javascript.pages.academy/kekstagram/data')
@@ -11,6 +12,7 @@ const getData = (onSuccess) => {
       onSuccess(posts);
     })
     .catch((err) => {
+      showErrorConnectMessage();
       throw Error(err);
     });
 };

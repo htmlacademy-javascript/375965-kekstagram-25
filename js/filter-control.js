@@ -94,6 +94,7 @@ const effectLevelSliderElement = document.querySelector('.effect-level__slider')
 const effectsContainerElement = document.querySelector('.effects__list');
 const imgUploadPreviewElement = document.querySelector('.img-upload__preview img');
 const effectLevelValueInputElement = document.querySelector('.effect-level__value');
+const effectLevelContainerElement = document.querySelector('.effect-level');
 
 const arrayOfFilterClass = [
   'effects__preview--chrome',
@@ -142,10 +143,12 @@ const onRadioChange = () => {
     imgUploadPreviewElement.classList.add(`effects__preview--${currentFilter}`);
     if (evt.target.classList.contains('effects__radio') && currentFilter !== EFFECT_NONE) {
       effectLevelSliderElement.style = 'display: block';
+      effectLevelContainerElement.style = 'display: block';
       effectLevelSliderElement.noUiSlider.updateOptions(filterParams[currentFilter]['filterParameter']);
     } else {
       effectLevelSliderElement.style = 'display: none';
       imgUploadPreviewElement.style = 'effect: none';
+      effectLevelContainerElement.style = 'display: none';
     }
   });
 };
